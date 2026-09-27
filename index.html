@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0B1120" id="metaThemeColor">
+  <meta name="theme-color" content="#090E17" id="metaThemeColor">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Studify Cloud — لوحة التحكم المركزية</title>
@@ -19,8 +19,10 @@
 
   <script>
     (function() {
-      const saved = localStorage.getItem('studify_cloud_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', saved);
+      try {
+        var saved = localStorage.getItem('studify_cloud_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+      } catch(e) {}
     })();
   </script>
 
@@ -609,8 +611,7 @@
     }
 
     /* ========================================================
-       MOBILE SPECIFIC COMPACT OPTIMIZATIONS (USER FEEDBACK)
-       "صغر شكلها شويا على الموبايل"
+       MOBILE SPECIFIC COMPACT OPTIMIZATIONS
        ======================================================== */
     @media (max-width: 768px) {
       .container {
@@ -636,7 +637,7 @@
         font-size: 0.72em;
         border-radius: 6px;
       }
-      .btn-hdr span { display: none; } /* Hide labels on mobile to save space */
+      .btn-hdr span { display: none; }
       .btn-hdr i { font-size: 1em; }
 
       .status-banner {
@@ -659,7 +660,6 @@
         padding: 4px 9px;
       }
 
-      /* Compact 3-col or 2-col stats grid */
       .stats-row {
         grid-template-columns: repeat(2, 1fr);
         gap: 6px;
@@ -669,7 +669,7 @@
         border-radius: 8px;
       }
       .stat-box:nth-child(5) {
-        grid-column: span 2; /* marketing full width on last row */
+        grid-column: span 2;
       }
       .stat-label {
         font-size: 0.68em;
@@ -678,7 +678,6 @@
         font-size: 0.95em;
       }
 
-      /* Emergency Buttons Compact */
       .emergency-grid {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -690,7 +689,6 @@
         border-radius: 10px;
       }
 
-      /* Presets Compact Stack */
       .presets-grid {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -719,7 +717,6 @@
         margin-bottom: 16px;
       }
 
-      /* Finance Section Compact */
       .finance-section {
         padding: 12px;
         border-radius: 12px;
@@ -775,11 +772,11 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-hdr" onclick="loadLiveStatus()" title="تحديث البيانات فوراً">
+      <button class="btn-hdr" onclick="window.loadLiveStatus()" title="تحديث البيانات فوراً">
         <i class="fa-solid fa-rotate" id="refreshIcon"></i>
         <span>تحديث</span>
       </button>
-      <button class="btn-hdr" id="themeToggleBtn" onclick="toggleTheme()" title="تبديل المظهر">
+      <button class="btn-hdr" id="themeToggleBtn" onclick="window.toggleTheme()" title="تبديل المظهر">
         <i class="fa-solid fa-sun" id="themeIcon"></i>
         <span id="themeLabel">النهاري</span>
       </button>
@@ -841,12 +838,12 @@
     </div>
 
     <div class="emergency-grid">
-      <button class="btn-action-lg btn-suspend" onclick="suspendSystemNow()">
+      <button class="btn-action-lg btn-suspend" onclick="window.suspendSystemNow()">
         <i class="fa-solid fa-ban"></i>
         <span>إيقاف السيستم فوراً (تعليق الاشتراك)</span>
       </button>
 
-      <button class="btn-action-lg btn-activate" onclick="activateSystemNow()">
+      <button class="btn-action-lg btn-activate" onclick="window.activateSystemNow()">
         <i class="fa-solid fa-circle-play"></i>
         <span>تشغيل وتفعيل السيستم فوراً</span>
       </button>
@@ -862,7 +859,7 @@
 
     <div class="presets-grid">
       <!-- 1 Month: Flexible -->
-      <div class="preset-card" onclick="applyPresetPlan('monthly')">
+      <div class="preset-card" onclick="window.applyPresetPlan('monthly')">
         <div class="preset-title">
           <span>الخطة المرنة</span>
           <span class="preset-tag" style="background:var(--primary-glow);color:var(--primary)">1 شهر</span>
@@ -876,7 +873,7 @@
       </div>
 
       <!-- 3 Months: Comfortable -->
-      <div class="preset-card" onclick="applyPresetPlan('quarterly')">
+      <div class="preset-card" onclick="window.applyPresetPlan('quarterly')">
         <div class="preset-title">
           <span>الخطة المريحة</span>
           <span class="preset-tag" style="background:rgba(6,182,212,0.15);color:var(--cyan)">3 شهور</span>
@@ -890,7 +887,7 @@
       </div>
 
       <!-- Full Term: Golden -->
-      <div class="preset-card" onclick="applyPresetPlan('semi_annual')">
+      <div class="preset-card" onclick="window.applyPresetPlan('semi_annual')">
         <div class="preset-title">
           <span>الخطة الذهبية</span>
           <span class="preset-tag" style="background:var(--warning-glow);color:var(--warning)">ترم كامل (5 شهور)</span>
@@ -905,7 +902,7 @@
     </div>
 
     <!-- CUSTOM EXTENSION BUTTON -->
-    <button class="btn-custom-plan" onclick="openCustomPlanModal()">
+    <button class="btn-custom-plan" onclick="window.openCustomPlanModal()">
       <i class="fa-solid fa-sliders"></i>
       <span>تجديد مخصص (تحديد عدد أيام أو طلاب أو مساعدين معينين)</span>
     </button>
@@ -918,7 +915,7 @@
           <span style="font-weight:800;font-size:0.95em;">سجل أرباح واشتراكات المالك الخاصة</span>
           <span class="finance-badge"><i class="fa-solid fa-lock"></i> خاص بك</span>
         </div>
-        <button class="btn-add-deal" onclick="openAddDealModal()">
+        <button class="btn-add-deal" onclick="window.openAddDealModal()">
           <i class="fa-solid fa-plus"></i>
           <span>تسجيل صفقة / اشتراك</span>
         </button>
@@ -937,7 +934,7 @@
           <div class="kpi-label">مصاريف التشغيل</div>
           <div class="kpi-value" id="kpiOps" style="color:var(--text-sec)">0 ج</div>
         </div>
-        <div class="kpi-card kpi-profit">
+        <div class="kpi-card">
           <div class="kpi-label">
             <span>صافي ربحك</span>
             <span id="kpiMargin" style="font-size:0.85em;color:var(--success);font-weight:800">0%</span>
@@ -966,43 +963,60 @@
   </footer>
 
   <script>
-    // ==========================================
-    // SUPABASE CREDENTIALS & HYBRID CONNECTION
-    // ==========================================
-    const SUPABASE_URL = "https://erwrrvafuxezszgbiswg.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyd3JydmFmdXhlenN6Z2Jpc3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTI4NzMsImV4cCI6MjEwMjgyODg3M30.xNbyENlnwes4XPWFoc10tooQTIC49WYo2zurvugkf9g";
+  (function() {
+    // SUPABASE CREDENTIALS
+    var SUPABASE_URL = "https://erwrrvafuxezszgbiswg.supabase.co";
+    var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyd3JydmFmdXhlenN6Z2Jpc3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTI4NzMsImV4cCI6MjEwMjgyODg3M30.xNbyENlnwes4XPWFoc10tooQTIC49WYo2zurvugkf9g";
 
-    let supabase = null;
+    // Supabase client instance (SAFE: does NOT collide with window.supabase)
+    var client = null;
     try {
       if (window.supabase && typeof window.supabase.createClient === 'function') {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
     } catch (e) {
-      console.warn('[Supabase SDK Init]', e);
+      console.warn('[Supabase Client Init]', e);
     }
 
-    let currentConfig = {};
-    let currentSettingsRow = null;
+    var currentConfig = {};
+    var currentSettingsRow = null;
 
-    // Direct REST API Fallback
+    // Toast helper with fallback
+    function showToast(msg, icon) {
+      icon = icon || 'success';
+      if (window.Swal && typeof window.Swal.fire === 'function') {
+        window.Swal.fire({
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          showConfirmButton: false,
+          icon: icon,
+          title: msg
+        });
+      } else {
+        alert(msg);
+      }
+    }
+
+    // Direct REST API (POSTGREST)
     async function directFetchSettings() {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?id=eq.1`, {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/settings?id=eq.1', {
         headers: {
           'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
         }
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const rows = await res.json();
+      var rows = await res.json();
       return rows[0] || null;
     }
 
     async function directUpdateSettings(config) {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?id=eq.1`, {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/settings?id=eq.1', {
         method: 'PATCH',
         headers: {
           'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           'Content-Type': 'application/json',
           'Prefer': 'return=representation'
         },
@@ -1012,165 +1026,186 @@
         })
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const rows = await res.json();
+      var rows = await res.json();
       return rows[0] || null;
     }
 
-    // ==========================================
-    // 1. LIVE STATUS LOADER
-    // ==========================================
-    async function loadLiveStatus() {
-      const icon = document.getElementById('refreshIcon');
+    // 1. Live Status Loader
+    window.loadLiveStatus = async function() {
+      var icon = document.getElementById('refreshIcon');
       if (icon) icon.classList.add('fa-spin');
 
+      var badge = document.getElementById('statusBadge');
+      var badgeText = document.getElementById('statusBadgeText');
+      if (badgeText) badgeText.textContent = 'جاري الاتصال بالسحابة...';
+
       try {
-        let data = null;
-        if (supabase) {
+        var data = null;
+        if (client) {
           try {
-            const res = await supabase.from('settings').select('*').eq('id', 1).maybeSingle();
+            var res = await client.from('settings').select('*').eq('id', 1).maybeSingle();
             data = res.data;
-          } catch (sdkErr) {
-            console.warn('[SDK fetch failed, fallback to REST]', sdkErr);
+          } catch (e) {
+            console.warn('[SDK fetch fallback to REST]', e);
           }
         }
         if (!data) {
           data = await directFetchSettings();
         }
 
-        if (!data) throw new Error('لم يتم استلام بيانات من السحابة');
+        if (!data) throw new Error('لم يتم العثور على سجل الإعدادات id=1');
 
         currentSettingsRow = data;
         currentConfig = data.config || {};
-        const sub = currentConfig.subscription || {};
+        var sub = currentConfig.subscription || {};
 
-        // Calculate subscription days & state
-        const today = new Date(); today.setHours(0,0,0,0);
-        let endDate = null;
+        var today = new Date(); today.setHours(0,0,0,0);
+        var endDate = null;
         if (sub.plan_end_date) {
           endDate = new Date(sub.plan_end_date);
           endDate.setHours(0,0,0,0);
         }
 
-        let daysLeft = 0;
+        var daysLeft = 0;
         if (endDate && !isNaN(endDate.getTime())) {
           daysLeft = Math.ceil((endDate - today) / 86400000);
         }
 
-        const isActive = (daysLeft > 0) && (sub.is_active !== false);
+        var isActive = (daysLeft > 0) && (sub.is_active !== false);
 
-        // Update UI Banner
-        const banner = document.getElementById('statusBanner');
-        const badge = document.getElementById('statusBadge');
-        const badgeText = document.getElementById('statusBadgeText');
-
+        var banner = document.getElementById('statusBanner');
         if (isActive) {
-          banner.className = 'status-banner active-plan';
-          badge.className = 'status-badge active';
-          badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>السيستم نشط وشغال</span>';
+          if (banner) banner.className = 'status-banner active-plan';
+          if (badge) {
+            badge.className = 'status-badge active';
+            badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>السيستم نشط وشغال</span>';
+          }
         } else {
-          banner.className = 'status-banner suspended-plan';
-          badge.className = 'status-badge suspended';
-          badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>السيستم موقوف ومعلق</span>';
+          if (banner) banner.className = 'status-banner suspended-plan';
+          if (badge) {
+            badge.className = 'status-badge suspended';
+            badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>السيستم موقوف ومعلق</span>';
+          }
         }
 
-        // Stats Values
-        document.getElementById('planNameDisplay').textContent = sub.plan_name || 'الخطة القياسية';
-        document.getElementById('daysLeftDisplay').textContent = isActive ? (daysLeft + ' يوم') : '0 يوم (منتهي)';
-        document.getElementById('daysLeftDisplay').style.color = isActive ? (daysLeft <= 5 ? 'var(--warning)' : 'var(--primary-light)') : 'var(--danger)';
-        document.getElementById('endDateDisplay').textContent = sub.plan_end_date || 'غير محدد';
-        document.getElementById('maxStudentsDisplay').textContent = (sub.max_students || (sub.plan_key === 'semi_annual' ? 1000 : (sub.plan_key === 'quarterly' ? 750 : 600))) + ' طالب';
-        document.getElementById('mktDisplay').textContent = (sub.plan_key === 'semi_annual' || !!sub.marketing_enabled) ? 'مفعلة' : 'معطلة';
+        var planEl = document.getElementById('planNameDisplay');
+        if (planEl) planEl.textContent = sub.plan_name || 'الخطة القياسية';
 
-        // Load synced owner deals if available in config
+        var daysEl = document.getElementById('daysLeftDisplay');
+        if (daysEl) {
+          daysEl.textContent = isActive ? (daysLeft + ' يوم') : '0 يوم (معلق/منتهي)';
+          daysEl.style.color = isActive ? (daysLeft <= 5 ? 'var(--warning)' : 'var(--primary-light)') : 'var(--danger)';
+        }
+
+        var endEl = document.getElementById('endDateDisplay');
+        if (endEl) endEl.textContent = sub.plan_end_date || 'غير محدد';
+
+        var maxStEl = document.getElementById('maxStudentsDisplay');
+        if (maxStEl) {
+          var maxSt = sub.max_students || (sub.plan_key === 'semi_annual' ? 1000 : (sub.plan_key === 'quarterly' ? 750 : 600));
+          maxStEl.textContent = maxSt + ' طالب';
+        }
+
+        var mktEl = document.getElementById('mktDisplay');
+        if (mktEl) {
+          var mktActive = (sub.plan_key === 'semi_annual' || !!sub.marketing_enabled);
+          mktEl.textContent = mktActive ? 'مفعلة' : 'معطلة';
+          mktEl.style.color = mktActive ? 'var(--success)' : 'var(--text-muted)';
+        }
+
         if (Array.isArray(currentConfig.owner_deals) && currentConfig.owner_deals.length > 0) {
-          const localDeals = JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]');
-          if (localDeals.length === 0) {
+          var local = [];
+          try { local = JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]'); } catch(e){}
+          if (local.length === 0) {
             localStorage.setItem('studify_cloud_deals', JSON.stringify(currentConfig.owner_deals));
           }
         }
         renderDeals();
 
       } catch (err) {
-        console.error(err);
-        showToast('تعذر جلب بيانات السنتر: ' + err.message, 'error');
-        const badge = document.getElementById('statusBadge');
+        console.error('[loadLiveStatus error]', err);
+        showToast('تعذر الاتصال بقاعدة البيانات: ' + err.message, 'error');
         if (badge) {
           badge.className = 'status-badge suspended';
-          badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>تعذر الاتصال</span>';
+          badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>تعذر الاتصال بالسحابة</span>';
         }
       } finally {
         if (icon) icon.classList.remove('fa-spin');
       }
-    }
+    };
 
-    // ==========================================
-    // 2. ONE-TAP EMERGENCY SUSPEND / ACTIVATE
-    // ==========================================
-    async function suspendSystemNow() {
-      const res = await Swal.fire({
-        title: 'هل تريد إيقاف السيستم فوراً؟',
-        text: 'بمجرد التأكيد، ستظهر شاشة طلب سداد الاشتراك عند السنتر ويتوقف العمل فوراً.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'نعم، أوقف السيستم الآن',
-        confirmButtonColor: '#EF4444',
-        cancelButtonText: 'تراجع',
-        customClass: { popup: 'swal-compact' }
-      });
-      if (!res.isConfirmed) return;
+    // 2. Suspend System Immediately
+    window.suspendSystemNow = async function() {
+      var confirmed = false;
+      if (window.Swal) {
+        var res = await Swal.fire({
+          title: 'هل تريد إيقاف السيستم فوراً؟',
+          text: 'بمجرد التأكيد، سيتم تعليق السيستم في نفس اللحظة وتظهر شاشة طلب سداد الاشتراك عند السنتر فوراً.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'نعم، أوقف السيستم الآن',
+          confirmButtonColor: '#EF4444',
+          cancelButtonText: 'تراجع'
+        });
+        confirmed = !!res.isConfirmed;
+      } else {
+        confirmed = confirm('هل تريد إيقاف وتعليق السيستم فوراً؟ ستظهر شاشة الحظر عند السنتر.');
+      }
+      if (!confirmed) return;
 
-      currentConfig.subscription = {
-        ...(currentConfig.subscription || {}),
-        is_active: false,
-        plan_end_date: '2026-01-01',
-        updated_at: new Date().toISOString()
-      };
+      currentConfig.subscription = currentConfig.subscription || {};
+      currentConfig.subscription.is_active = false;
+      currentConfig.subscription.plan_end_date = '2026-01-01';
+      currentConfig.subscription.updated_at = new Date().toISOString();
 
-      await pushConfigToCloud('تم إيقاف وتعليق السيستم بنجاح!');
-    }
+      await pushConfigToCloud('تم إيقاف وتعليق السيستم بنجاح! سيتم إغلاق السيستم فوراً.');
+    };
 
-    async function activateSystemNow() {
-      const future = new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0];
-      currentConfig.subscription = {
-        ...(currentConfig.subscription || {}),
-        is_active: true,
-        plan_end_date: future,
-        updated_at: new Date().toISOString()
-      };
+    // 3. Activate System Immediately
+    window.activateSystemNow = async function() {
+      var future = new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0];
+      currentConfig.subscription = currentConfig.subscription || {};
+      currentConfig.subscription.is_active = true;
+      currentConfig.subscription.plan_end_date = future;
+      currentConfig.subscription.updated_at = new Date().toISOString();
 
-      await pushConfigToCloud('تم تشغيل وتفعيل السيستم بنجاح لمدة 30 يوم!');
-    }
+      await pushConfigToCloud('تم تفعيل وتشغيل السيستم بنجاح لمدة 30 يوم!');
+    };
 
-    // ==========================================
-    // 3. PRESET PLANS (1 MO / 3 MO / FULL TERM)
-    // ==========================================
-    async function applyPresetPlan(planKey) {
-      const presets = {
+    // 4. Apply Preset Plans
+    window.applyPresetPlan = async function(planKey) {
+      var presets = {
         monthly: { name: 'الخطة المرنة', days: 30, maxSt: 600, maxAsst: 2, mkt: false },
         quarterly: { name: 'الخطة المريحة', days: 90, maxSt: 750, maxAsst: 4, mkt: false },
         semi_annual: { name: 'الخطة الذهبية', days: 150, maxSt: 1000, maxAsst: 5, mkt: true }
       };
-      const p = presets[planKey];
+      var p = presets[planKey];
       if (!p) return;
 
-      const res = await Swal.fire({
-        title: `تفعيل ${p.name}؟`,
-        html: `<div style="font-size:0.9em;color:var(--text-sec);line-height:1.6;text-align:right;">
-          • المدة: <b>${p.days} يوم</b><br>
-          • الحد الأقصى للطلاب: <b>${p.maxSt} طالب</b><br>
-          • الحد الأقصى للمساعدين: <b>${p.maxAsst} مساعد</b><br>
-          • حملات الواتساب: <b>${p.mkt ? 'مفعلة' : 'معطلة'}</b>
-        </div>`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'تأكيد التفعيل',
-        confirmButtonColor: '#2563EB',
-        cancelButtonText: 'إلغاء'
-      });
-      if (!res.isConfirmed) return;
+      var confirmed = false;
+      if (window.Swal) {
+        var res = await Swal.fire({
+          title: 'تفعيل ' + p.name + '؟',
+          html: '<div style="font-size:0.9em;color:var(--text-sec);line-height:1.7;text-align:right;">' +
+                '• المدة: <b>' + p.days + ' يوم</b><br>' +
+                '• الحد الأقصى للطلاب: <b>' + p.maxSt + ' طالب</b><br>' +
+                '• الحد الأقصى للمساعدين: <b>' + p.maxAsst + ' مساعد</b><br>' +
+                '• تسويق الواتساب: <b>' + (p.mkt ? 'مفعل' : 'معطل') + '</b>' +
+                '</div>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'تأكيد التفعيل',
+          confirmButtonColor: '#2563EB',
+          cancelButtonText: 'إلغاء'
+        });
+        confirmed = !!res.isConfirmed;
+      } else {
+        confirmed = confirm('هل تريد تفعيل ' + p.name + ' (' + p.days + ' يوم)؟');
+      }
+      if (!confirmed) return;
 
-      const today = new Date().toISOString().split('T')[0];
-      const future = new Date(Date.now() + p.days * 86400000).toISOString().split('T')[0];
+      var today = new Date().toISOString().split('T')[0];
+      var future = new Date(Date.now() + p.days * 86400000).toISOString().split('T')[0];
 
       currentConfig.subscription = {
         plan_key: planKey,
@@ -1184,53 +1219,70 @@
         updated_at: new Date().toISOString()
       };
 
-      await pushConfigToCloud(`تم تفعيل ${p.name} بنجاح!`);
-    }
+      await pushConfigToCloud('تم تفعيل ' + p.name + ' بنجاح!');
+    };
 
-    // ==========================================
-    // 4. CUSTOM EXTENSION MODAL
-    // ==========================================
-    async function openCustomPlanModal() {
-      const curSub = currentConfig.subscription || {};
-      const { value: formValues } = await Swal.fire({
+    // 5. Custom Plan Modal
+    window.openCustomPlanModal = async function() {
+      var curSub = currentConfig.subscription || {};
+      if (!window.Swal) {
+        var d = prompt('أدخل عدد أيام الاشتراك:', '60');
+        if (!d) return;
+        var st = prompt('أدخل الحد الأقصى للطلاب:', '800');
+        if (!st) return;
+        var future = new Date(Date.now() + parseInt(d) * 86400000).toISOString().split('T')[0];
+        currentConfig.subscription = {
+          plan_key: 'custom',
+          plan_name: 'باقة مخصصة',
+          plan_start_date: new Date().toISOString().split('T')[0],
+          plan_end_date: future,
+          max_students: parseInt(st) || 800,
+          max_assistants: 3,
+          marketing_enabled: true,
+          is_active: true,
+          updated_at: new Date().toISOString()
+        };
+        await pushConfigToCloud('تم تفعيل الباقة المخصصة بنجاح!');
+        return;
+      }
+
+      var res = await Swal.fire({
         title: 'تجديد مخصص للسنتر',
-        html: `
-          <div style="display:flex;flex-direction:column;gap:10px;text-align:right;font-size:0.88em;">
-            <div>
-              <label style="font-weight:700;">اسم الباقة:</label>
-              <input id="swal_plan_name" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.plan_name || 'باقة مخصصة'}">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <div>
-                <label style="font-weight:700;">عدد الأيام:</label>
-                <input id="swal_days" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="60">
-              </div>
-              <div>
-                <label style="font-weight:700;">الحد الأقصى للطلاب:</label>
-                <input id="swal_max_st" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.max_students || 800}">
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <div>
-                <label style="font-weight:700;">الحد الأقصى للمساعدين:</label>
-                <input id="swal_max_asst" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.max_assistants || 3}">
-              </div>
-              <div>
-                <label style="font-weight:700;">تسويق الواتساب:</label>
-                <select id="swal_mkt" class="swal2-input" style="width:100%;margin:4px 0;">
-                  <option value="1" ${curSub.marketing_enabled ? 'selected' : ''}>مفعل</option>
-                  <option value="0" ${!curSub.marketing_enabled ? 'selected' : ''}>معطل</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        `,
+        html: '<div style="display:flex;flex-direction:column;gap:10px;text-align:right;font-size:0.88em;">' +
+              '  <div>' +
+              '    <label style="font-weight:700;">اسم الباقة:</label>' +
+              '    <input id="swal_plan_name" class="swal2-input" style="width:100%;margin:4px 0;" value="' + (curSub.plan_name || 'باقة مخصصة') + '">' +
+              '  </div>' +
+              '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+              '    <div>' +
+              '      <label style="font-weight:700;">عدد الأيام:</label>' +
+              '      <input id="swal_days" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="60">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">الحد الأقصى للطلاب:</label>' +
+              '      <input id="swal_max_st" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="' + (curSub.max_students || 800) + '">' +
+              '    </div>' +
+              '  </div>' +
+              '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+              '    <div>' +
+              '      <label style="font-weight:700;">الحد الأقصى للمساعدين:</label>' +
+              '      <input id="swal_max_asst" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="' + (curSub.max_assistants || 3) + '">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">تسويق الواتساب:</label>' +
+              '      <select id="swal_mkt" class="swal2-input" style="width:100%;margin:4px 0;">' +
+              '        <option value="1" ' + (curSub.marketing_enabled ? 'selected' : '') + '>مفعل</option>' +
+              '        <option value="0" ' + (!curSub.marketing_enabled ? 'selected' : '') + '>معطل</option>' +
+              '      </select>' +
+              '    </div>' +
+              '  </div>' +
+              '</div>',
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'تطبيق وتجديد',
         confirmButtonColor: '#2563EB',
         cancelButtonText: 'إلغاء',
-        preConfirm: () => {
+        preConfirm: function() {
           return {
             name: document.getElementById('swal_plan_name').value.trim() || 'باقة مخصصة',
             days: parseInt(document.getElementById('swal_days').value) || 30,
@@ -1241,43 +1293,44 @@
         }
       });
 
-      if (!formValues) return;
+      if (!res.value) return;
+      var vals = res.value;
 
-      const today = new Date().toISOString().split('T')[0];
-      const future = new Date(Date.now() + formValues.days * 86400000).toISOString().split('T')[0];
+      var todayStr = new Date().toISOString().split('T')[0];
+      var futureStr = new Date(Date.now() + vals.days * 86400000).toISOString().split('T')[0];
 
       currentConfig.subscription = {
         plan_key: 'custom',
-        plan_name: formValues.name,
-        plan_start_date: today,
-        plan_end_date: future,
-        max_students: formValues.maxSt,
-        max_assistants: formValues.maxAsst,
-        marketing_enabled: formValues.mkt,
+        plan_name: vals.name,
+        plan_start_date: todayStr,
+        plan_end_date: futureStr,
+        max_students: vals.maxSt,
+        max_assistants: vals.maxAsst,
+        marketing_enabled: vals.mkt,
         is_active: true,
         updated_at: new Date().toISOString()
       };
 
-      await pushConfigToCloud(`تم تطبيق ${formValues.name} بنجاح لمدة ${formValues.days} يوم!`);
-    }
+      await pushConfigToCloud('تم تطبيق ' + vals.name + ' بنجاح لمدة ' + vals.days + ' يوم!');
+    };
 
-    // ==========================================
-    // 5. CLOUD PUSH ENGINE
-    // ==========================================
+    // 6. Push to Cloud Engine
     async function pushConfigToCloud(successMsg) {
-      Swal.fire({
-        title: 'جاري التحديث بالسحابة...',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading()
-      });
+      if (window.Swal) {
+        Swal.fire({
+          title: 'جاري التحديث بالسحابة...',
+          allowOutsideClick: false,
+          didOpen: function() { Swal.showLoading(); }
+        });
+      }
 
       try {
-        let ok = false;
-        if (supabase) {
+        var ok = false;
+        if (client) {
           try {
-            const { error } = await supabase.from('settings').update({ config: currentConfig, updated_at: new Date().toISOString() }).eq('id', 1);
-            if (!error) ok = true;
-          } catch (e) {
+            var res = await client.from('settings').update({ config: currentConfig, updated_at: new Date().toISOString() }).eq('id', 1);
+            if (!res.error) ok = true;
+          } catch(e) {
             console.warn('[SDK push failed, fallback to REST]', e);
           }
         }
@@ -1285,262 +1338,35 @@
           await directUpdateSettings(currentConfig);
         }
 
-        Swal.fire('تم بنجاح', successMsg, 'success');
-        loadLiveStatus();
-      } catch (err) {
-        console.error(err);
-        Swal.fire('خطأ في الاتصال', 'تعذر الحفظ في Supabase: ' + err.message, 'error');
-      }
-    }
-
-    // ==========================================
-    // 6. OWNER FINANCIAL / DEAL TRACKER
-    // ==========================================
-    function getStoredDeals() {
-      try {
-        return JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]');
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveStoredDeals(deals) {
-      localStorage.setItem('studify_cloud_deals', JSON.stringify(deals));
-      // Sync to cloud config background
-      currentConfig.owner_deals = deals;
-      if (supabase) {
-        supabase.from('settings').update({ config: currentConfig }).eq('id', 1).then(() => {}).catch(() => {});
-      } else {
-        directUpdateSettings(currentConfig).catch(() => {});
-      }
-      renderDeals();
-    }
-
-    function renderDeals() {
-      const deals = getStoredDeals();
-      let totalGross = 0;
-      let totalMarketer = 0;
-      let totalOps = 0;
-      let totalNet = 0;
-
-      deals.forEach(d => {
-        totalGross += Number(d.gross) || 0;
-        totalMarketer += Number(d.marketer) || 0;
-        totalOps += Number(d.ops) || 0;
-        totalNet += Number(d.net) || 0;
-      });
-
-      document.getElementById('kpiGross').textContent = totalGross.toLocaleString('en-US') + ' ج';
-      document.getElementById('kpiMarketer').textContent = totalMarketer.toLocaleString('en-US') + ' ج';
-      document.getElementById('kpiOps').textContent = totalOps.toLocaleString('en-US') + ' ج';
-      document.getElementById('kpiNet').textContent = totalNet.toLocaleString('en-US') + ' ج';
-
-      const margin = totalGross > 0 ? Math.round((totalNet / totalGross) * 100) : 0;
-      document.getElementById('kpiMargin').textContent = margin + '% هامش';
-
-      const listEl = document.getElementById('dealsListEl');
-      if (!listEl) return;
-
-      if (deals.length === 0) {
-        listEl.innerHTML = `
-          <div class="empty-deals">
-            <i class="fa-regular fa-folder-open" style="font-size:1.8em;margin-bottom:6px;display:block;"></i>
-            لا توجد صفقات مسجلة بعد. اضغط "تسجيل صفقة / اشتراك" لإضافة أول اشتراك.
-          </div>`;
-        return;
-      }
-
-      listEl.innerHTML = deals.map((d, idx) => `
-        <div class="deal-item">
-          <div class="deal-main">
-            <div class="deal-center">
-              <span>${d.center || 'سنتر'}</span>
-              <span style="font-size:0.85em;padding:2px 6px;border-radius:4px;background:var(--border);color:var(--text-sec);">${d.plan || 'باقة'}</span>
-            </div>
-            <div class="deal-sub">
-              <span><i class="fa-regular fa-calendar"></i> ${d.date || 'اليوم'}</span>
-              ${d.marketerName ? `<span><i class="fa-solid fa-user-tag"></i> المسوق: ${d.marketerName}</span>` : ''}
-              ${d.notes ? `<span><i class="fa-regular fa-comment"></i> ${d.notes}</span>` : ''}
-            </div>
-          </div>
-          <div class="deal-fin-breakdown">
-            <div>
-              <div class="deal-net">+${Number(d.net || 0).toLocaleString('en-US')} ج</div>
-              <div style="font-size:0.75em;color:var(--text-muted)">
-                إجمالي ${d.gross} | خصم ${d.marketer} | سيرفر ${d.ops}
-              </div>
-            </div>
-            <button class="btn-del-deal" onclick="deleteDeal(${idx})" title="حذف الصفقة">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function openAddDealModal() {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const { value: dealData } = await Swal.fire({
-        title: 'تسجيل صفقة / اشتراك سنتر',
-        html: `
-          <div style="display:flex;flex-direction:column;gap:8px;text-align:right;font-size:0.86em;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <div>
-                <label style="font-weight:700;">اسم السنتر:</label>
-                <input id="deal_center" class="swal2-input" style="width:100%;margin:4px 0;" value="سنتر أحمد قطب">
-              </div>
-              <div>
-                <label style="font-weight:700;">نوع الباقة:</label>
-                <select id="deal_plan" class="swal2-input" style="width:100%;margin:4px 0;">
-                  <option value="الخطة الذهبية (ترم)">الخطة الذهبية (ترم - 150 يوم)</option>
-                  <option value="الخطة المريحة (3 شهور)">الخطة المريحة (3 شهور)</option>
-                  <option value="الخطة المرنة (شهر)">الخطة المرنة (شهر)</option>
-                  <option value="باقة مخصصة">باقة مخصصة</option>
-                </select>
-              </div>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-              <div>
-                <label style="font-weight:700;">السعر الإجمالي (ج):</label>
-                <input id="deal_gross" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="8000" oninput="calcModalPreview()">
-              </div>
-              <div>
-                <label style="font-weight:700;">عمولة/خصم المسوق:</label>
-                <input id="deal_marketer" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="2000" oninput="calcModalPreview()">
-              </div>
-              <div>
-                <label style="font-weight:700;">مصاريف السيرفر:</label>
-                <input id="deal_ops" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="1000" oninput="calcModalPreview()">
-              </div>
-            </div>
-
-            <div id="modalProfitPreview" style="background:var(--success-glow);border:1px solid rgba(16,185,129,0.3);padding:8px 12px;border-radius:8px;text-align:center;font-weight:800;color:var(--success);font-size:0.95em;">
-              صافي الربح لك: 0 ج (هامش 0%)
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <div>
-                <label style="font-weight:700;">اسم المسوق / المندوب:</label>
-                <input id="deal_marketer_name" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="اختياري">
-              </div>
-              <div>
-                <label style="font-weight:700;">تاريخ التعاقد:</label>
-                <input id="deal_date" type="date" class="swal2-input" style="width:100%;margin:4px 0;" value="${todayStr}">
-              </div>
-            </div>
-
-            <div>
-              <label style="font-weight:700;">ملاحظات:</label>
-              <input id="deal_notes" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="طريقة الدفع، تفاصيل أخرى...">
-            </div>
-          </div>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'حفظ الصفقة',
-        confirmButtonColor: '#8B5CF6',
-        cancelButtonText: 'إلغاء',
-        didOpen: () => {
-          window.calcModalPreview = function() {
-            const gross = parseFloat(document.getElementById('deal_gross').value) || 0;
-            const mkt = parseFloat(document.getElementById('deal_marketer').value) || 0;
-            const ops = parseFloat(document.getElementById('deal_ops').value) || 0;
-            const net = gross - mkt - ops;
-            const pct = gross > 0 ? Math.round((net / gross) * 100) : 0;
-            const el = document.getElementById('modalProfitPreview');
-            if (el) {
-              el.textContent = `صافي الربح لك: ${net.toLocaleString('en-US')} ج (هامش ${pct}%)`;
-              el.style.color = net >= 0 ? 'var(--success)' : 'var(--danger)';
-            }
-          };
-          window.calcModalPreview();
-        },
-        preConfirm: () => {
-          const gross = parseFloat(document.getElementById('deal_gross').value) || 0;
-          const marketer = parseFloat(document.getElementById('deal_marketer').value) || 0;
-          const ops = parseFloat(document.getElementById('deal_ops').value) || 0;
-          const net = gross - marketer - ops;
-
-          if (gross <= 0) {
-            Swal.showValidationMessage('يرجى إدخال السعر الإجمالي');
-            return false;
-          }
-
-          return {
-            center: document.getElementById('deal_center').value.trim(),
-            plan: document.getElementById('deal_plan').value,
-            gross,
-            marketer,
-            ops,
-            net,
-            marketerName: document.getElementById('deal_marketer_name').value.trim(),
-            date: document.getElementById('deal_date').value,
-            notes: document.getElementById('deal_notes').value.trim(),
-            createdAt: new Date().toISOString()
-          };
+        if (window.Swal) {
+          Swal.fire('تم بنجاح', successMsg, 'success');
+        } else {
+          alert(successMsg);
         }
-      });
-
-      if (!dealData) return;
-
-      const deals = getStoredDeals();
-      deals.unshift(dealData);
-      saveStoredDeals(deals);
-      showToast('تم حفظ الصفقة وتحديث مؤشرات الأرباح بنجاح', 'success');
-    }
-
-    async function deleteDeal(idx) {
-      const res = await Swal.fire({
-        title: 'حذف هذه الصفقة؟',
-        text: 'سيتم حذف هذا السجل وتحديث حسابات الأرباح.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'نعم، احذف',
-        confirmButtonColor: '#EF4444',
-        cancelButtonText: 'إلغاء'
-      });
-      if (!res.isConfirmed) return;
-
-      const deals = getStoredDeals();
-      deals.splice(idx, 1);
-      saveStoredDeals(deals);
-      showToast('تم حذف الصفقة', 'info');
-    }
-
-    // ==========================================
-    // 7. REALTIME LIVE SYNC
-    // ==========================================
-    function setupRealtimeListener() {
-      if (!supabase) return;
-      try {
-        supabase
-          .channel('cloud-manager-sync')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'settings', filter: 'id=eq.1' }, (payload) => {
-            console.log('[Realtime Push from Cloud]', payload);
-            loadLiveStatus();
-          })
-          .subscribe();
-      } catch (e) {
-        console.warn('[Realtime error]', e);
+        window.loadLiveStatus();
+      } catch (err) {
+        console.error('[pushConfigToCloud error]', err);
+        if (window.Swal) {
+          Swal.fire('خطأ في الاتصال', 'تعذر الحفظ في السحابة: ' + err.message, 'error');
+        } else {
+          alert('خطأ: ' + err.message);
+        }
       }
     }
 
-    // ==========================================
-    // 8. THEME TOGGLE (DARK / LIGHT)
-    // ==========================================
-    function toggleTheme() {
-      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-      const next = cur === 'dark' ? 'light' : 'dark';
+    // 7. Theme Toggle
+    window.toggleTheme = function() {
+      var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = (cur === 'dark') ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('studify_cloud_theme', next);
+      try { localStorage.setItem('studify_cloud_theme', next); } catch(e){}
       updateThemeUI(next);
-    }
+    };
 
     function updateThemeUI(theme) {
-      const icon = document.getElementById('themeIcon');
-      const label = document.getElementById('themeLabel');
-      const meta = document.getElementById('metaThemeColor');
+      var icon = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+      var meta = document.getElementById('metaThemeColor');
       if (theme === 'light') {
         if (icon) icon.className = 'fa-solid fa-moon';
         if (label) label.textContent = 'الليلي';
@@ -1552,26 +1378,271 @@
       }
     }
 
-    function showToast(msg, icon = 'success') {
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        timer: 3000,
-        showConfirmButton: false,
-        icon,
-        title: msg
-      });
+    // 8. Owner Financial Tracker
+    function getStoredDeals() {
+      try {
+        return JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]');
+      } catch (e) {
+        return [];
+      }
     }
 
-    // ==========================================
-    // 9. INIT ON LOAD
-    // ==========================================
-    document.addEventListener('DOMContentLoaded', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    function saveStoredDeals(deals) {
+      try { localStorage.setItem('studify_cloud_deals', JSON.stringify(deals)); } catch(e){}
+      currentConfig.owner_deals = deals;
+      if (client) {
+        client.from('settings').update({ config: currentConfig }).eq('id', 1).then(function(){}).catch(function(){});
+      } else {
+        directUpdateSettings(currentConfig).catch(function(){});
+      }
+      renderDeals();
+    }
+
+    function renderDeals() {
+      var deals = getStoredDeals();
+      var totalGross = 0;
+      var totalMarketer = 0;
+      var totalOps = 0;
+      var totalNet = 0;
+
+      deals.forEach(function(d) {
+        totalGross += Number(d.gross) || 0;
+        totalMarketer += Number(d.marketer) || 0;
+        totalOps += Number(d.ops) || 0;
+        totalNet += Number(d.net) || 0;
+      });
+
+      var kg = document.getElementById('kpiGross');
+      if (kg) kg.textContent = totalGross.toLocaleString('en-US') + ' ج';
+      var km = document.getElementById('kpiMarketer');
+      if (km) km.textContent = totalMarketer.toLocaleString('en-US') + ' ج';
+      var ko = document.getElementById('kpiOps');
+      if (ko) ko.textContent = totalOps.toLocaleString('en-US') + ' ج';
+      var kn = document.getElementById('kpiNet');
+      if (kn) kn.textContent = totalNet.toLocaleString('en-US') + ' ج';
+
+      var margin = totalGross > 0 ? Math.round((totalNet / totalGross) * 100) : 0;
+      var kmarg = document.getElementById('kpiMargin');
+      if (kmarg) kmarg.textContent = margin + '% هامش';
+
+      var listEl = document.getElementById('dealsListEl');
+      if (!listEl) return;
+
+      if (deals.length === 0) {
+        listEl.innerHTML = '<div class="empty-deals">' +
+                           '<i class="fa-regular fa-folder-open" style="font-size:1.8em;margin-bottom:6px;display:block;"></i>' +
+                           'لا توجد صفقات مسجلة بعد. اضغط "تسجيل صفقة / اشتراك" لإضافة أول اشتراك.' +
+                           '</div>';
+        return;
+      }
+
+      listEl.innerHTML = deals.map(function(d, idx) {
+        return '<div class="deal-item">' +
+               '  <div class="deal-main">' +
+               '    <div class="deal-center">' +
+               '      <span>' + (d.center || 'سنتر') + '</span>' +
+               '      <span style="font-size:0.85em;padding:2px 6px;border-radius:4px;background:var(--border);color:var(--text-sec);">' + (d.plan || 'باقة') + '</span>' +
+               '    </div>' +
+               '    <div class="deal-sub">' +
+               '      <span><i class="fa-regular fa-calendar"></i> ' + (d.date || 'اليوم') + '</span>' +
+               (d.marketerName ? '<span><i class="fa-solid fa-user-tag"></i> المسوق: ' + d.marketerName + '</span>' : '') +
+               (d.notes ? '<span><i class="fa-regular fa-comment"></i> ' + d.notes + '</span>' : '') +
+               '    </div>' +
+               '  </div>' +
+               '  <div class="deal-fin-breakdown">' +
+               '    <div>' +
+               '      <div class="deal-net">+' + Number(d.net || 0).toLocaleString('en-US') + ' ج</div>' +
+               '      <div style="font-size:0.75em;color:var(--text-muted)">' +
+               '        إجمالي ' + d.gross + ' | خصم ' + d.marketer + ' | سيرفر ' + d.ops +
+               '      </div>' +
+               '    </div>' +
+               '    <button class="btn-del-deal" onclick="window.deleteDeal(' + idx + ')" title="حذف الصفقة">' +
+               '      <i class="fa-solid fa-trash-can"></i>' +
+               '    </button>' +
+               '  </div>' +
+               '</div>';
+      }).join('');
+    }
+
+    window.openAddDealModal = async function() {
+      if (!window.Swal) {
+        var g = prompt('السعر الإجمالي (ج):', '8000');
+        if (!g) return;
+        var m = prompt('عمولة أو خصم المسوق (ج):', '2000') || 0;
+        var o = prompt('مصاريف السيرفر (ج):', '1000') || 0;
+        var gross = parseFloat(g) || 0;
+        var marketer = parseFloat(m) || 0;
+        var ops = parseFloat(o) || 0;
+        var net = gross - marketer - ops;
+        var deals = getStoredDeals();
+        deals.unshift({
+          center: 'سنتر أحمد قطب',
+          plan: 'الخطة الذهبية',
+          gross: gross,
+          marketer: marketer,
+          ops: ops,
+          net: net,
+          date: new Date().toISOString().split('T')[0],
+          createdAt: new Date().toISOString()
+        });
+        saveStoredDeals(deals);
+        showToast('تم حفظ الصفقة بنجاح', 'success');
+        return;
+      }
+
+      var todayStr = new Date().toISOString().split('T')[0];
+      var res = await Swal.fire({
+        title: 'تسجيل صفقة / اشتراك سنتر',
+        html: '<div style="display:flex;flex-direction:column;gap:8px;text-align:right;font-size:0.86em;">' +
+              '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+              '    <div>' +
+              '      <label style="font-weight:700;">اسم السنتر:</label>' +
+              '      <input id="deal_center" class="swal2-input" style="width:100%;margin:4px 0;" value="سنتر أحمد قطب">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">نوع الباقة:</label>' +
+              '      <select id="deal_plan" class="swal2-input" style="width:100%;margin:4px 0;">' +
+              '        <option value="الخطة الذهبية (ترم)">الخطة الذهبية (ترم - 150 يوم)</option>' +
+              '        <option value="الخطة المريحة (3 شهور)">الخطة المريحة (3 شهور)</option>' +
+              '        <option value="الخطة المرنة (شهر)">الخطة المرنة (شهر)</option>' +
+              '        <option value="باقة مخصصة">باقة مخصصة</option>' +
+              '      </select>' +
+              '    </div>' +
+              '  </div>' +
+              '  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">' +
+              '    <div>' +
+              '      <label style="font-weight:700;">السعر الإجمالي (ج):</label>' +
+              '      <input id="deal_gross" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="8000" oninput="window.calcModalPreview()">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">عمولة/خصم المسوق:</label>' +
+              '      <input id="deal_marketer" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="2000" oninput="window.calcModalPreview()">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">مصاريف السيرفر:</label>' +
+              '      <input id="deal_ops" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="1000" oninput="window.calcModalPreview()">' +
+              '    </div>' +
+              '  </div>' +
+              '  <div id="modalProfitPreview" style="background:var(--success-glow);border:1px solid rgba(16,185,129,0.3);padding:8px 12px;border-radius:8px;text-align:center;font-weight:800;color:var(--success);font-size:0.95em;">' +
+              '    صافي الربح لك: 0 ج (هامش 0%)' +
+              '  </div>' +
+              '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+              '    <div>' +
+              '      <label style="font-weight:700;">اسم المسوق / المندوب:</label>' +
+              '      <input id="deal_marketer_name" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="اختياري">' +
+              '    </div>' +
+              '    <div>' +
+              '      <label style="font-weight:700;">تاريخ التعاقد:</label>' +
+              '      <input id="deal_date" type="date" class="swal2-input" style="width:100%;margin:4px 0;" value="' + todayStr + '">' +
+              '    </div>' +
+              '  </div>' +
+              '  <div>' +
+              '    <label style="font-weight:700;">ملاحظات:</label>' +
+              '    <input id="deal_notes" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="طريقة الدفع، تفاصيل أخرى...">' +
+              '  </div>' +
+              '</div>',
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'حفظ الصفقة',
+        confirmButtonColor: '#8B5CF6',
+        cancelButtonText: 'إلغاء',
+        didOpen: function() {
+          window.calcModalPreview = function() {
+            var gross = parseFloat(document.getElementById('deal_gross').value) || 0;
+            var mkt = parseFloat(document.getElementById('deal_marketer').value) || 0;
+            var ops = parseFloat(document.getElementById('deal_ops').value) || 0;
+            var net = gross - mkt - ops;
+            var pct = gross > 0 ? Math.round((net / gross) * 100) : 0;
+            var el = document.getElementById('modalProfitPreview');
+            if (el) {
+              el.textContent = 'صافي الربح لك: ' + net.toLocaleString('en-US') + ' ج (هامش ' + pct + '%)';
+              el.style.color = (net >= 0) ? 'var(--success)' : 'var(--danger)';
+            }
+          };
+          window.calcModalPreview();
+        },
+        preConfirm: function() {
+          var gross = parseFloat(document.getElementById('deal_gross').value) || 0;
+          var marketer = parseFloat(document.getElementById('deal_marketer').value) || 0;
+          var ops = parseFloat(document.getElementById('deal_ops').value) || 0;
+          var net = gross - marketer - ops;
+
+          if (gross <= 0) {
+            Swal.showValidationMessage('يرجى إدخال السعر الإجمالي');
+            return false;
+          }
+
+          return {
+            center: document.getElementById('deal_center').value.trim(),
+            plan: document.getElementById('deal_plan').value,
+            gross: gross,
+            marketer: marketer,
+            ops: ops,
+            net: net,
+            marketerName: document.getElementById('deal_marketer_name').value.trim(),
+            date: document.getElementById('deal_date').value,
+            notes: document.getElementById('deal_notes').value.trim(),
+            createdAt: new Date().toISOString()
+          };
+        }
+      });
+
+      if (!res.value) return;
+      var deals = getStoredDeals();
+      deals.unshift(res.value);
+      saveStoredDeals(deals);
+      showToast('تم حفظ الصفقة وتحديث مؤشرات الأرباح بنجاح', 'success');
+    };
+
+    window.deleteDeal = async function(idx) {
+      var confirmed = false;
+      if (window.Swal) {
+        var res = await Swal.fire({
+          title: 'حذف هذه الصفقة؟',
+          text: 'سيتم حذف هذا السجل وتحديث حسابات الأرباح.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'نعم، احذف',
+          confirmButtonColor: '#EF4444',
+          cancelButtonText: 'إلغاء'
+        });
+        confirmed = !!res.isConfirmed;
+      } else {
+        confirmed = confirm('هل تريد حذف هذه الصفقة؟');
+      }
+      if (!confirmed) return;
+
+      var deals = getStoredDeals();
+      deals.splice(idx, 1);
+      saveStoredDeals(deals);
+      showToast('تم حذف الصفقة', 'info');
+    };
+
+    // 9. Realtime Live Listener
+    function setupRealtimeListener() {
+      if (!client) return;
+      try {
+        client
+          .channel('cloud-manager-sync')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'settings', filter: 'id=eq.1' }, function(payload) {
+            console.log('[Realtime Push from Cloud]', payload);
+            window.loadLiveStatus();
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('[Realtime error]', e);
+      }
+    }
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', function() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
       updateThemeUI(currentTheme);
-      loadLiveStatus();
+      window.loadLiveStatus();
       setupRealtimeListener();
     });
+
+  })();
   </script>
 </body>
 </html>
