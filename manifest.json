@@ -1,0 +1,18 @@
+{
+  "name": "Studify Cloud Manager",
+  "short_name": "Studify Cloud",
+  "description": "Master SaaS Subscription and License Manager",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1120",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

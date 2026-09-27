@@ -2,52 +2,81 @@
 <html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1120" id="metaThemeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Studify Cloud — لوحة التحكم المركزية</title>
+  
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
-    // Apply saved theme early to prevent flash
     (function() {
       const saved = localStorage.getItem('studify_cloud_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
     })();
   </script>
+
   <style>
     :root, [data-theme="dark"] {
-      --bg: #0B1120;
-      --surface: #151F32;
-      --card: #1E293B;
-      --border: #334155;
+      --bg: #090E17;
+      --surface: #111A2E;
+      --card: #18233C;
+      --card-hover: #1E2D4A;
+      --border: #233352;
+      --border-subtle: #1A2840;
       --text: #F8FAFC;
       --text-sec: #94A3B8;
+      --text-muted: #64748B;
       --primary: #2563EB;
-      --primary-glow: rgba(37,99,235,0.25);
+      --primary-light: #3B82F6;
+      --primary-glow: rgba(37,99,235,0.22);
       --danger: #EF4444;
-      --danger-glow: rgba(239,68,68,0.25);
+      --danger-glow: rgba(239,68,68,0.22);
       --success: #10B981;
-      --success-glow: rgba(16,185,129,0.25);
+      --success-glow: rgba(16,185,129,0.22);
       --warning: #F59E0B;
+      --warning-glow: rgba(245,158,11,0.22);
+      --cyan: #06B6D4;
+      --purple: #8B5CF6;
+      --purple-glow: rgba(139,92,246,0.22);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+      --shadow-md: 0 6px 20px rgba(0,0,0,0.3);
     }
     [data-theme="light"] {
-      --bg: #F8FAFC;
+      --bg: #F4F6F9;
       --surface: #FFFFFF;
-      --card: #F1F5F9;
+      --card: #F8FAFC;
+      --card-hover: #EEF2F6;
       --border: #E2E8F0;
+      --border-subtle: #EDF2F7;
       --text: #0F172A;
       --text-sec: #475569;
+      --text-muted: #64748B;
       --primary: #2563EB;
-      --primary-glow: rgba(37,99,235,0.12);
+      --primary-light: #3B82F6;
+      --primary-glow: rgba(37,99,235,0.1);
       --danger: #EF4444;
-      --danger-glow: rgba(239,68,68,0.12);
+      --danger-glow: rgba(239,68,68,0.1);
       --success: #10B981;
-      --success-glow: rgba(16,185,129,0.12);
+      --success-glow: rgba(16,185,129,0.1);
       --warning: #D97706;
+      --warning-glow: rgba(217,119,6,0.1);
+      --cyan: #0891B2;
+      --purple: #7C3AED;
+      --purple-glow: rgba(124,58,237,0.1);
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.08);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Almarai', 'Cairo', sans-serif;
       background: var(--bg);
@@ -55,93 +84,118 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      line-height: 1.6;
+      line-height: 1.5;
       transition: background-color .2s, color .2s;
     }
 
+    /* TOP HEADER */
     .top-header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
     }
     .brand-wrap {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .brand-icon {
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, #2563EB, #06B6D4);
-      border-radius: 12px;
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #1E4ED8, #06B6D4);
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 1.3em;
-      box-shadow: 0 4px 14px var(--primary-glow);
+      color: #fff; font-size: 1.15em;
+      box-shadow: 0 3px 10px var(--primary-glow);
+      flex-shrink: 0;
     }
     .brand-title {
-      font-size: 1.25em;
+      font-size: 1.1em;
       font-weight: 800;
       color: var(--text);
+      line-height: 1.2;
     }
     .brand-sub {
-      font-size: 0.78em;
+      font-size: 0.72em;
       color: var(--text-sec);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+      box-shadow: 0 0 8px var(--success);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
-    .theme-btn, .refresh-btn {
+    .btn-hdr {
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 9px 16px;
-      border-radius: 10px;
+      padding: 7px 12px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.88em;
-      display: flex; align-items: center; gap: 8px;
-      transition: all .2s;
+      font-size: 0.8em;
+      display: flex; align-items: center; gap: 6px;
+      transition: all .15s;
       font-family: inherit;
     }
-    .theme-btn:hover, .refresh-btn:hover {
+    .btn-hdr:hover {
       border-color: var(--primary);
+      background: var(--card-hover);
       transform: translateY(-1px);
     }
-    .theme-btn i {
-      color: var(--warning);
-      font-size: 1.1em;
-    }
+    .btn-hdr:active { transform: scale(0.97); }
+    .btn-hdr i { font-size: 0.95em; }
 
+    /* MAIN CONTAINER */
     .container {
-      max-width: 1000px;
+      max-width: 960px;
       width: 100%;
-      margin: 30px auto;
-      padding: 0 20px;
+      margin: 18px auto;
+      padding: 0 16px;
       flex: 1;
     }
 
+    /* STATUS BANNER CARD */
     .status-banner {
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 24px;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      transition: all .25s ease;
     }
     .status-banner.active-plan {
-      border-color: rgba(16,185,129,0.5);
-      background: linear-gradient(135deg, rgba(16,185,129,0.06), var(--surface));
+      border-color: rgba(16,185,129,0.4);
+      background: linear-gradient(145deg, rgba(16,185,129,0.06), var(--surface));
     }
     .status-banner.suspended-plan {
-      border-color: rgba(239,68,68,0.5);
-      background: linear-gradient(135deg, rgba(239,68,68,0.08), var(--surface));
+      border-color: rgba(239,68,68,0.4);
+      background: linear-gradient(145deg, rgba(239,68,68,0.08), var(--surface));
     }
 
     .banner-top {
@@ -149,33 +203,36 @@
       justify-content: space-between;
       align-items: flex-start;
       flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
     .center-info h2 {
-      font-size: 1.5em;
+      font-size: 1.25em;
       font-weight: 800;
       color: var(--text);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .center-email {
-      font-size: 0.88em;
+      font-size: 0.78em;
       color: var(--text-sec);
       direction: ltr;
-      display: inline-block;
-      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 3px;
     }
 
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 18px;
+      gap: 6px;
+      padding: 5px 12px;
       border-radius: 20px;
       font-weight: 800;
-      font-size: 0.9em;
+      font-size: 0.82em;
+      flex-shrink: 0;
     }
     .status-badge.active {
       background: var(--success-glow);
@@ -190,134 +247,160 @@
     }
     @keyframes pulseAlert {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
+      50% { transform: scale(1.03); }
     }
 
+    /* COMPACT STATS ROW */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
     }
     .stat-box {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
+      border-radius: 10px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
+      min-width: 0;
     }
     .stat-label {
-      font-size: 0.8em;
+      font-size: 0.72em;
       color: var(--text-sec);
       font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .stat-value {
-      font-size: 1.3em;
+      font-size: 1.1em;
       font-weight: 800;
       color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
+    /* SECTION TITLES */
     .section-title {
-      font-size: 1.15em;
+      font-size: 1.05em;
       font-weight: 800;
       color: var(--text);
-      margin: 32px 0 16px;
+      margin: 22px 0 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .section-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .section-title i { color: var(--primary); }
 
-    /* Action Buttons Grid */
+    /* ACTION BUTTONS (EMERGENCY) */
     .emergency-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 28px;
+      gap: 12px;
+      margin-bottom: 20px;
     }
     .btn-action-lg {
-      padding: 18px 22px;
-      border-radius: 14px;
+      padding: 13px 16px;
+      border-radius: 12px;
       font-weight: 800;
-      font-size: 1.05em;
+      font-size: 0.95em;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       transition: all .2s;
       font-family: inherit;
-    }
-    .btn-suspend {
-      background: linear-gradient(135deg, #EF4444, #B91C1C);
       color: #fff;
-      box-shadow: 0 6px 20px var(--danger-glow);
+    }
+    .btn-action-lg:active { transform: scale(0.98); }
+    .btn-suspend {
+      background: linear-gradient(135deg, #EF4444, #DC2626);
+      box-shadow: 0 4px 14px var(--danger-glow);
     }
     .btn-suspend:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 26px rgba(239,68,68,0.45);
+      box-shadow: 0 6px 18px rgba(239,68,68,0.4);
+      transform: translateY(-1px);
     }
     .btn-activate {
       background: linear-gradient(135deg, #10B981, #059669);
-      color: #fff;
-      box-shadow: 0 6px 20px var(--success-glow);
+      box-shadow: 0 4px 14px var(--success-glow);
     }
     .btn-activate:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 26px rgba(16,185,129,0.45);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.4);
+      transform: translateY(-1px);
     }
 
-    /* Preset Plans Grid */
+    /* PRESET PLANS GRID */
     .presets-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
       margin-bottom: 24px;
     }
     .preset-card {
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 14px;
       cursor: pointer;
       transition: all .2s;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
     }
     .preset-card:hover {
       border-color: var(--primary);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
     .preset-title {
       font-weight: 800;
-      font-size: 1.1em;
+      font-size: 0.98em;
       color: var(--text);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .preset-desc {
-      font-size: 0.88em;
-      color: var(--text-sec);
-      line-height: 1.6;
+    .preset-tag {
+      font-size: 0.72em;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
     }
+    .preset-desc {
+      font-size: 0.78em;
+      color: var(--text-sec);
+      line-height: 1.5;
+    }
+    .preset-desc span { display: block; margin-bottom: 2px; }
     .btn-apply-preset {
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--primary);
-      padding: 11px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.9em;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.82em;
       cursor: pointer;
-      transition: all .2s;
-      margin-top: 6px;
+      transition: all .15s;
+      margin-top: 4px;
       font-family: inherit;
+      width: 100%;
+      text-align: center;
     }
     .preset-card:hover .btn-apply-preset {
       background: var(--primary);
@@ -325,24 +408,359 @@
       border-color: var(--primary);
     }
 
-    .footer {
-      text-align: center;
-      padding: 24px;
+    /* CUSTOM RENEWAL BUTTON */
+    .btn-custom-plan {
+      background: var(--card);
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
       color: var(--text-sec);
-      font-size: 0.82em;
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
+      font-weight: 700;
+      font-size: 0.85em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .15s;
+      margin-bottom: 24px;
+      width: 100%;
+      font-family: inherit;
+    }
+    .btn-custom-plan:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--surface);
     }
 
-    @media (max-width: 600px) {
-      .emergency-grid { grid-template-columns: 1fr; }
-      .top-header { flex-direction: column; gap: 12px; align-items: flex-start; }
-      .header-actions { width: 100%; justify-content: space-between; }
+    /* OWNER FINANCIAL TRACKER SECTION */
+    .finance-section {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .finance-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .finance-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .finance-badge {
+      background: var(--purple-glow);
+      color: var(--purple);
+      border: 1px solid rgba(139,92,246,0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72em;
+      font-weight: 800;
+    }
+    .btn-add-deal {
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.82em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s;
+      font-family: inherit;
+      box-shadow: 0 3px 10px var(--purple-glow);
+    }
+    .btn-add-deal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(139,92,246,0.4);
+    }
+
+    .finance-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .kpi-card.kpi-profit {
+      background: linear-gradient(145deg, rgba(16,185,129,0.1), var(--card));
+      border-color: rgba(16,185,129,0.35);
+    }
+    .kpi-label {
+      font-size: 0.72em;
+      color: var(--text-sec);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .kpi-value {
+      font-size: 1.15em;
+      font-weight: 900;
+      color: var(--text);
+    }
+    .kpi-profit .kpi-value { color: var(--success); }
+
+    /* DEALS TABLE / CARDS LIST */
+    .deals-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-inline-end: 4px;
+    }
+    .deal-item {
+      background: var(--card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.82em;
+      transition: background-color .15s;
+    }
+    .deal-item:hover { background: var(--card-hover); }
+    .deal-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .deal-center {
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .deal-sub {
+      font-size: 0.85em;
+      color: var(--text-sec);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .deal-fin-breakdown {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      text-align: left;
+    }
+    .deal-net {
+      font-weight: 900;
+      color: var(--success);
+      font-size: 1.05em;
+    }
+    .btn-del-deal {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color .15s;
+    }
+    .btn-del-deal:hover { color: var(--danger); }
+    .empty-deals {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 0.85em;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 18px 20px;
+      color: var(--text-muted);
+      font-size: 0.75em;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ========================================================
+       MOBILE SPECIFIC COMPACT OPTIMIZATIONS (USER FEEDBACK)
+       "صغر شكلها شويا على الموبايل"
+       ======================================================== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+        margin: 10px auto;
+      }
+      .top-header {
+        padding: 8px 12px;
+      }
+      .brand-icon {
+        width: 32px; height: 32px;
+        font-size: 0.95em;
+        border-radius: 8px;
+      }
+      .brand-title {
+        font-size: 0.95em;
+      }
+      .brand-sub {
+        font-size: 0.65em;
+      }
+      .btn-hdr {
+        padding: 5px 9px;
+        font-size: 0.72em;
+        border-radius: 6px;
+      }
+      .btn-hdr span { display: none; } /* Hide labels on mobile to save space */
+      .btn-hdr i { font-size: 1em; }
+
+      .status-banner {
+        padding: 12px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+      .banner-top {
+        margin-bottom: 10px;
+        gap: 8px;
+      }
+      .center-info h2 {
+        font-size: 1.05em;
+      }
+      .center-email {
+        font-size: 0.72em;
+      }
+      .status-badge {
+        font-size: 0.72em;
+        padding: 4px 9px;
+      }
+
+      /* Compact 3-col or 2-col stats grid */
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+      .stat-box {
+        padding: 7px 9px;
+        border-radius: 8px;
+      }
+      .stat-box:nth-child(5) {
+        grid-column: span 2; /* marketing full width on last row */
+      }
+      .stat-label {
+        font-size: 0.68em;
+      }
+      .stat-value {
+        font-size: 0.95em;
+      }
+
+      /* Emergency Buttons Compact */
+      .emergency-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .btn-action-lg {
+        padding: 10px 14px;
+        font-size: 0.85em;
+        border-radius: 10px;
+      }
+
+      /* Presets Compact Stack */
+      .presets-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .preset-card {
+        padding: 10px 12px;
+        border-radius: 10px;
+        gap: 6px;
+      }
+      .preset-title {
+        font-size: 0.88em;
+      }
+      .preset-desc {
+        font-size: 0.72em;
+        line-height: 1.4;
+      }
+      .btn-apply-preset {
+        padding: 6px 8px;
+        font-size: 0.78em;
+      }
+
+      .btn-custom-plan {
+        padding: 8px 12px;
+        font-size: 0.78em;
+        margin-bottom: 16px;
+      }
+
+      /* Finance Section Compact */
+      .finance-section {
+        padding: 12px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+      .finance-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+      .finance-kpis {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .kpi-card {
+        padding: 7px 9px;
+        border-radius: 8px;
+      }
+      .kpi-label { font-size: 0.68em; }
+      .kpi-value { font-size: 0.95em; }
+
+      .deal-item {
+        padding: 8px 10px;
+        font-size: 0.75em;
+      }
+      .deal-fin-breakdown {
+        font-size: 0.9em;
+      }
+
+      .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+        padding: 12px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- TOP HEADER -->
   <header class="top-header">
     <div class="brand-wrap">
       <div class="brand-icon">
@@ -350,23 +768,28 @@
       </div>
       <div>
         <div class="brand-title">Studify Cloud Manager</div>
-        <div class="brand-sub">لوحة التحكم المركزية بالاشتراكات وتراخيص السناتر</div>
+        <div class="brand-sub">
+          <span class="live-dot"></span>
+          <span>لوحة التحكم بالاشتراكات وتراخيص السناتر</span>
+        </div>
       </div>
     </div>
     <div class="header-actions">
-      <button class="refresh-btn" onclick="loadLiveStatus()">
-        <i class="fa-solid fa-rotate" id="refreshIcon"></i> تحديث فوري
+      <button class="btn-hdr" onclick="loadLiveStatus()" title="تحديث البيانات فوراً">
+        <i class="fa-solid fa-rotate" id="refreshIcon"></i>
+        <span>تحديث</span>
       </button>
-      <button class="theme-btn" id="themeToggleBtn" onclick="toggleTheme()">
+      <button class="btn-hdr" id="themeToggleBtn" onclick="toggleTheme()" title="تبديل المظهر">
         <i class="fa-solid fa-sun" id="themeIcon"></i>
-        <span id="themeLabel">الوضع النهاري</span>
+        <span id="themeLabel">النهاري</span>
       </button>
     </div>
   </header>
 
+  <!-- MAIN VIEWPORT -->
   <main class="container">
 
-    <!-- Live Status Banner -->
+    <!-- LIVE STATUS CARD -->
     <div id="statusBanner" class="status-banner active-plan">
       <div class="banner-top">
         <div class="center-info">
@@ -374,28 +797,32 @@
             <i class="fa-solid fa-graduation-cap" style="color:var(--primary)"></i>
             <span id="centerName">سنتر أحمد قطب</span>
           </h2>
-          <span class="center-email" id="centerEmail">ahmedqutb11232@gmail.com</span>
+          <span class="center-email" id="centerEmail">
+            <i class="fa-regular fa-envelope" style="font-size:0.9em;"></i>
+            ahmedqutb11232@gmail.com
+          </span>
         </div>
         <div id="statusBadge" class="status-badge active">
-          <i class="fa-solid fa-circle-check"></i> <span>جاري الفحص...</span>
+          <i class="fa-solid fa-circle-check"></i>
+          <span id="statusBadgeText">جاري الاتصال بالسحابة...</span>
         </div>
       </div>
 
       <div class="stats-row">
         <div class="stat-box">
-          <span class="stat-label">الباقة المشترك بها</span>
+          <span class="stat-label">الباقة الحالية</span>
           <span class="stat-value" id="planNameDisplay">—</span>
         </div>
         <div class="stat-box">
           <span class="stat-label">الأيام المتبقية</span>
-          <span class="stat-value" id="daysLeftDisplay">—</span>
+          <span class="stat-value" id="daysLeftDisplay" style="color:var(--primary-light)">—</span>
         </div>
         <div class="stat-box">
           <span class="stat-label">تاريخ الانتهاء</span>
-          <span class="stat-value" id="endDateDisplay" style="font-size:1.05em;">—</span>
+          <span class="stat-value" id="endDateDisplay" style="font-size:0.95em;">—</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">الحد الأقصى للطلاب</span>
+          <span class="stat-label">سعة الطلاب</span>
           <span class="stat-value" id="maxStudentsDisplay">—</span>
         </div>
         <div class="stat-box">
@@ -405,10 +832,12 @@
       </div>
     </div>
 
-    <!-- Emergency Actions (One-click) -->
+    <!-- ONE-TAP ACTIONS -->
     <div class="section-title">
-      <i class="fa-solid fa-bolt"></i>
-      أوامر التحكم الفورية (تسميع فوري في السيستم)
+      <div class="section-title-left">
+        <i class="fa-solid fa-bolt"></i>
+        <span>أوامر التحكم الفورية (تسميع فوري بالسيستم)</span>
+      </div>
     </div>
 
     <div class="emergency-grid">
@@ -423,92 +852,217 @@
       </button>
     </div>
 
-    <!-- Preset Plans -->
+    <!-- PRESET PLANS -->
     <div class="section-title">
-      <i class="fa-solid fa-layer-group"></i>
-      تجديد سريع للباقات الرسمية
+      <div class="section-title-left">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>تجديد سريع للباقات الرسمية</span>
+      </div>
     </div>
 
     <div class="presets-grid">
-      <!-- Flexible -->
+      <!-- 1 Month: Flexible -->
       <div class="preset-card" onclick="applyPresetPlan('monthly')">
         <div class="preset-title">
           <span>الخطة المرنة</span>
-          <span style="font-size:0.85em;color:var(--primary);font-weight:700">1 شهر</span>
+          <span class="preset-tag" style="background:var(--primary-glow);color:var(--primary)">1 شهر</span>
         </div>
         <div class="preset-desc">
-          • حتى 600 طالب<br>
-          • حتى 2 مساعدين<br>
-          • بدون تسويق واتساب
+          <span>• حتى <b>600</b> طالب مسجل</span>
+          <span>• حتى <b>2</b> مساعدين</span>
+          <span>• بدون تسويق واتساب</span>
         </div>
-        <button class="btn-apply-preset">تفعيل الخطة المرنة (30 يوم)</button>
+        <button class="btn-apply-preset">تفعيل الباقة (30 يوم)</button>
       </div>
 
-      <!-- Comfortable -->
+      <!-- 3 Months: Comfortable -->
       <div class="preset-card" onclick="applyPresetPlan('quarterly')">
         <div class="preset-title">
           <span>الخطة المريحة</span>
-          <span style="font-size:0.85em;color:#06B6D4;font-weight:700">3 شهور</span>
+          <span class="preset-tag" style="background:rgba(6,182,212,0.15);color:var(--cyan)">3 شهور</span>
         </div>
         <div class="preset-desc">
-          • حتى 750 طالب<br>
-          • حتى 4 مساعدين<br>
-          • بدون تسويق واتساب
+          <span>• حتى <b>750</b> طالب مسجل</span>
+          <span>• حتى <b>4</b> مساعدين</span>
+          <span>• بدون تسويق واتساب</span>
         </div>
-        <button class="btn-apply-preset">تفعيل الخطة المريحة (90 يوم)</button>
+        <button class="btn-apply-preset">تفعيل الباقة (90 يوم)</button>
       </div>
 
-      <!-- Golden -->
+      <!-- Full Term: Golden -->
       <div class="preset-card" onclick="applyPresetPlan('semi_annual')">
         <div class="preset-title">
           <span>الخطة الذهبية</span>
-          <span style="font-size:0.85em;color:var(--warning);font-weight:700">6 شهور</span>
+          <span class="preset-tag" style="background:var(--warning-glow);color:var(--warning)">ترم كامل (5 شهور)</span>
         </div>
         <div class="preset-desc">
-          • حتى 1,000 طالب<br>
-          • حتى 5 مساعدين<br>
-          • حملات التسويق الذكية بالواتساب
+          <span>• حتى <b>1,000</b> طالب مسجل</span>
+          <span>• حتى <b>5</b> مساعدين</span>
+          <span>• <b>حملات التسويق الذكية بالواتساب</b></span>
         </div>
-        <button class="btn-apply-preset">تفعيل الخطة الذهبية (180 يوم)</button>
+        <button class="btn-apply-preset">تفعيل الباقة (150 يوم)</button>
+      </div>
+    </div>
+
+    <!-- CUSTOM EXTENSION BUTTON -->
+    <button class="btn-custom-plan" onclick="openCustomPlanModal()">
+      <i class="fa-solid fa-sliders"></i>
+      <span>تجديد مخصص (تحديد عدد أيام أو طلاب أو مساعدين معينين)</span>
+    </button>
+
+    <!-- OWNER FINANCIAL & PROFIT TRACKER -->
+    <div class="finance-section">
+      <div class="finance-header">
+        <div class="finance-title-wrap">
+          <i class="fa-solid fa-wallet" style="color:var(--purple);font-size:1.15em;"></i>
+          <span style="font-weight:800;font-size:0.95em;">سجل أرباح واشتراكات المالك الخاصة</span>
+          <span class="finance-badge"><i class="fa-solid fa-lock"></i> خاص بك</span>
+        </div>
+        <button class="btn-add-deal" onclick="openAddDealModal()">
+          <i class="fa-solid fa-plus"></i>
+          <span>تسجيل صفقة / اشتراك</span>
+        </button>
+      </div>
+
+      <div class="finance-kpis">
+        <div class="kpi-card">
+          <div class="kpi-label">إجمالي المبيعات</div>
+          <div class="kpi-value" id="kpiGross">0 ج</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">عمولات المسوقين</div>
+          <div class="kpi-value" id="kpiMarketer" style="color:var(--warning)">0 ج</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">مصاريف التشغيل</div>
+          <div class="kpi-value" id="kpiOps" style="color:var(--text-sec)">0 ج</div>
+        </div>
+        <div class="kpi-card kpi-profit">
+          <div class="kpi-label">
+            <span>صافي ربحك</span>
+            <span id="kpiMargin" style="font-size:0.85em;color:var(--success);font-weight:800">0%</span>
+          </div>
+          <div class="kpi-value" id="kpiNet">0 ج</div>
+        </div>
+      </div>
+
+      <!-- DEALS HISTORY -->
+      <div class="deals-list" id="dealsListEl">
+        <div class="empty-deals">
+          <i class="fa-regular fa-folder-open" style="font-size:1.8em;margin-bottom:6px;display:block;"></i>
+          لا توجد صفقات مسجلة بعد. اضغط "تسجيل صفقة / اشتراك" لإضافة أول اشتراك.
+        </div>
       </div>
     </div>
 
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    Studify SaaS Engine &copy; 2026 — Master Control Portal for Badr Alaa
+    <div>Studify SaaS Engine &copy; 2026 — Master Control Portal for Badr Alaa</div>
+    <div style="font-size:0.9em;color:var(--text-muted)">
+      <i class="fa-solid fa-shield-halved"></i> اتصال مشفر بالسحابة المركزية
+    </div>
   </footer>
 
   <script>
-    // SUPABASE CREDENTIALS (Live Connection)
+    // ==========================================
+    // SUPABASE CREDENTIALS & HYBRID CONNECTION
+    // ==========================================
     const SUPABASE_URL = "https://erwrrvafuxezszgbiswg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyd3JydmFmdXhlenN6Z2Jpc3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTI4NzMsImV4cCI6MjEwMjgyODg3M30.xNbyENlnwes4XPWFoc10tooQTIC49WYo2zurvugkf9g";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let supabase = null;
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn('[Supabase SDK Init]', e);
+    }
 
     let currentConfig = {};
+    let currentSettingsRow = null;
 
+    // Direct REST API Fallback
+    async function directFetchSettings() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?id=eq.1`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const rows = await res.json();
+      return rows[0] || null;
+    }
+
+    async function directUpdateSettings(config) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?id=eq.1`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          config: config,
+          updated_at: new Date().toISOString()
+        })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const rows = await res.json();
+      return rows[0] || null;
+    }
+
+    // ==========================================
+    // 1. LIVE STATUS LOADER
+    // ==========================================
     async function loadLiveStatus() {
       const icon = document.getElementById('refreshIcon');
       if (icon) icon.classList.add('fa-spin');
+
       try {
-        const { data, error } = await supabase.from('settings').select('*').eq('id', 1).maybeSingle();
-        if (error || !data) {
-          showToast('فشل جلب بيانات السنتر من Supabase', 'error');
-          return;
+        let data = null;
+        if (supabase) {
+          try {
+            const res = await supabase.from('settings').select('*').eq('id', 1).maybeSingle();
+            data = res.data;
+          } catch (sdkErr) {
+            console.warn('[SDK fetch failed, fallback to REST]', sdkErr);
+          }
+        }
+        if (!data) {
+          data = await directFetchSettings();
         }
 
+        if (!data) throw new Error('لم يتم استلام بيانات من السحابة');
+
+        currentSettingsRow = data;
         currentConfig = data.config || {};
         const sub = currentConfig.subscription || {};
 
+        // Calculate subscription days & state
         const today = new Date(); today.setHours(0,0,0,0);
-        const endDate = sub.plan_end_date ? new Date(sub.plan_end_date) : new Date();
-        endDate.setHours(0,0,0,0);
-        const daysLeft = Math.ceil((endDate - today) / (86400000));
+        let endDate = null;
+        if (sub.plan_end_date) {
+          endDate = new Date(sub.plan_end_date);
+          endDate.setHours(0,0,0,0);
+        }
+
+        let daysLeft = 0;
+        if (endDate && !isNaN(endDate.getTime())) {
+          daysLeft = Math.ceil((endDate - today) / 86400000);
+        }
+
         const isActive = (daysLeft > 0) && (sub.is_active !== false);
 
-        // Update Banner UI
+        // Update UI Banner
         const banner = document.getElementById('statusBanner');
         const badge = document.getElementById('statusBadge');
+        const badgeText = document.getElementById('statusBadgeText');
+
         if (isActive) {
           banner.className = 'status-banner active-plan';
           badge.className = 'status-badge active';
@@ -519,28 +1073,49 @@
           badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>السيستم موقوف ومعلق</span>';
         }
 
+        // Stats Values
         document.getElementById('planNameDisplay').textContent = sub.plan_name || 'الخطة القياسية';
         document.getElementById('daysLeftDisplay').textContent = isActive ? (daysLeft + ' يوم') : '0 يوم (منتهي)';
-        document.getElementById('endDateDisplay').textContent = sub.plan_end_date || '—';
-        document.getElementById('maxStudentsDisplay').textContent = (sub.max_students || 600) + ' طالب';
-        document.getElementById('mktDisplay').textContent = sub.marketing_enabled ? 'مفعلة' : 'معطلة';
+        document.getElementById('daysLeftDisplay').style.color = isActive ? (daysLeft <= 5 ? 'var(--warning)' : 'var(--primary-light)') : 'var(--danger)';
+        document.getElementById('endDateDisplay').textContent = sub.plan_end_date || 'غير محدد';
+        document.getElementById('maxStudentsDisplay').textContent = (sub.max_students || (sub.plan_key === 'semi_annual' ? 1000 : (sub.plan_key === 'quarterly' ? 750 : 600))) + ' طالب';
+        document.getElementById('mktDisplay').textContent = (sub.plan_key === 'semi_annual' || !!sub.marketing_enabled) ? 'مفعلة' : 'معطلة';
+
+        // Load synced owner deals if available in config
+        if (Array.isArray(currentConfig.owner_deals) && currentConfig.owner_deals.length > 0) {
+          const localDeals = JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]');
+          if (localDeals.length === 0) {
+            localStorage.setItem('studify_cloud_deals', JSON.stringify(currentConfig.owner_deals));
+          }
+        }
+        renderDeals();
 
       } catch (err) {
         console.error(err);
+        showToast('تعذر جلب بيانات السنتر: ' + err.message, 'error');
+        const badge = document.getElementById('statusBadge');
+        if (badge) {
+          badge.className = 'status-badge suspended';
+          badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>تعذر الاتصال</span>';
+        }
       } finally {
         if (icon) icon.classList.remove('fa-spin');
       }
     }
 
+    // ==========================================
+    // 2. ONE-TAP EMERGENCY SUSPEND / ACTIVATE
+    // ==========================================
     async function suspendSystemNow() {
       const res = await Swal.fire({
         title: 'هل تريد إيقاف السيستم فوراً؟',
-        text: 'بمجرد التأكيد، سيتم تعليق السيستم عند العميل وتظهر له شاشة طلب سداد الاشتراك فوراً.',
+        text: 'بمجرد التأكيد، ستظهر شاشة طلب سداد الاشتراك عند السنتر ويتوقف العمل فوراً.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'نعم، أوقف السيستم الآن',
         confirmButtonColor: '#EF4444',
-        cancelButtonText: 'إلغاء'
+        cancelButtonText: 'تراجع',
+        customClass: { popup: 'swal-compact' }
       });
       if (!res.isConfirmed) return;
 
@@ -551,7 +1126,7 @@
         updated_at: new Date().toISOString()
       };
 
-      await pushToSupabase('تم إيقاف وتعليق السيستم بنجاح!');
+      await pushConfigToCloud('تم إيقاف وتعليق السيستم بنجاح!');
     }
 
     async function activateSystemNow() {
@@ -563,21 +1138,29 @@
         updated_at: new Date().toISOString()
       };
 
-      await pushToSupabase('تم تشغيل وتفعيل السيستم بنجاح لمدة 30 يوم!');
+      await pushConfigToCloud('تم تشغيل وتفعيل السيستم بنجاح لمدة 30 يوم!');
     }
 
+    // ==========================================
+    // 3. PRESET PLANS (1 MO / 3 MO / FULL TERM)
+    // ==========================================
     async function applyPresetPlan(planKey) {
       const presets = {
         monthly: { name: 'الخطة المرنة', days: 30, maxSt: 600, maxAsst: 2, mkt: false },
         quarterly: { name: 'الخطة المريحة', days: 90, maxSt: 750, maxAsst: 4, mkt: false },
-        semi_annual: { name: 'الخطة الذهبية', days: 180, maxSt: 1000, maxAsst: 5, mkt: true }
+        semi_annual: { name: 'الخطة الذهبية', days: 150, maxSt: 1000, maxAsst: 5, mkt: true }
       };
       const p = presets[planKey];
       if (!p) return;
 
       const res = await Swal.fire({
         title: `تفعيل ${p.name}؟`,
-        text: `سيتم ضبط الصلاحيات: ${p.maxSt} طالب، ومدة ${p.days} يوم، والتسويق: ${p.mkt ? 'مفعل' : 'معطل'}.`,
+        html: `<div style="font-size:0.9em;color:var(--text-sec);line-height:1.6;text-align:right;">
+          • المدة: <b>${p.days} يوم</b><br>
+          • الحد الأقصى للطلاب: <b>${p.maxSt} طالب</b><br>
+          • الحد الأقصى للمساعدين: <b>${p.maxAsst} مساعد</b><br>
+          • حملات الواتساب: <b>${p.mkt ? 'مفعلة' : 'معطلة'}</b>
+        </div>`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'تأكيد التفعيل',
@@ -601,32 +1184,351 @@
         updated_at: new Date().toISOString()
       };
 
-      await pushToSupabase(`تم تفعيل ${p.name} بنجاح!`);
+      await pushConfigToCloud(`تم تفعيل ${p.name} بنجاح!`);
     }
 
-    async function pushToSupabase(successMsg) {
+    // ==========================================
+    // 4. CUSTOM EXTENSION MODAL
+    // ==========================================
+    async function openCustomPlanModal() {
+      const curSub = currentConfig.subscription || {};
+      const { value: formValues } = await Swal.fire({
+        title: 'تجديد مخصص للسنتر',
+        html: `
+          <div style="display:flex;flex-direction:column;gap:10px;text-align:right;font-size:0.88em;">
+            <div>
+              <label style="font-weight:700;">اسم الباقة:</label>
+              <input id="swal_plan_name" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.plan_name || 'باقة مخصصة'}">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-weight:700;">عدد الأيام:</label>
+                <input id="swal_days" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="60">
+              </div>
+              <div>
+                <label style="font-weight:700;">الحد الأقصى للطلاب:</label>
+                <input id="swal_max_st" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.max_students || 800}">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-weight:700;">الحد الأقصى للمساعدين:</label>
+                <input id="swal_max_asst" type="number" class="swal2-input" style="width:100%;margin:4px 0;" value="${curSub.max_assistants || 3}">
+              </div>
+              <div>
+                <label style="font-weight:700;">تسويق الواتساب:</label>
+                <select id="swal_mkt" class="swal2-input" style="width:100%;margin:4px 0;">
+                  <option value="1" ${curSub.marketing_enabled ? 'selected' : ''}>مفعل</option>
+                  <option value="0" ${!curSub.marketing_enabled ? 'selected' : ''}>معطل</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'تطبيق وتجديد',
+        confirmButtonColor: '#2563EB',
+        cancelButtonText: 'إلغاء',
+        preConfirm: () => {
+          return {
+            name: document.getElementById('swal_plan_name').value.trim() || 'باقة مخصصة',
+            days: parseInt(document.getElementById('swal_days').value) || 30,
+            maxSt: parseInt(document.getElementById('swal_max_st').value) || 600,
+            maxAsst: parseInt(document.getElementById('swal_max_asst').value) || 2,
+            mkt: document.getElementById('swal_mkt').value === '1'
+          };
+        }
+      });
+
+      if (!formValues) return;
+
+      const today = new Date().toISOString().split('T')[0];
+      const future = new Date(Date.now() + formValues.days * 86400000).toISOString().split('T')[0];
+
+      currentConfig.subscription = {
+        plan_key: 'custom',
+        plan_name: formValues.name,
+        plan_start_date: today,
+        plan_end_date: future,
+        max_students: formValues.maxSt,
+        max_assistants: formValues.maxAsst,
+        marketing_enabled: formValues.mkt,
+        is_active: true,
+        updated_at: new Date().toISOString()
+      };
+
+      await pushConfigToCloud(`تم تطبيق ${formValues.name} بنجاح لمدة ${formValues.days} يوم!`);
+    }
+
+    // ==========================================
+    // 5. CLOUD PUSH ENGINE
+    // ==========================================
+    async function pushConfigToCloud(successMsg) {
       Swal.fire({
-        title: 'جاري الإرسال للسحابة...',
+        title: 'جاري التحديث بالسحابة...',
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading()
       });
 
       try {
-        const { error } = await supabase
-          .from('settings')
-          .update({ config: currentConfig })
-          .eq('id', 1);
-
-        if (error) throw error;
+        let ok = false;
+        if (supabase) {
+          try {
+            const { error } = await supabase.from('settings').update({ config: currentConfig, updated_at: new Date().toISOString() }).eq('id', 1);
+            if (!error) ok = true;
+          } catch (e) {
+            console.warn('[SDK push failed, fallback to REST]', e);
+          }
+        }
+        if (!ok) {
+          await directUpdateSettings(currentConfig);
+        }
 
         Swal.fire('تم بنجاح', successMsg, 'success');
         loadLiveStatus();
-      } catch (e) {
-        console.error(e);
-        Swal.fire('خطأ', 'تعذر الحفظ في Supabase: ' + e.message, 'error');
+      } catch (err) {
+        console.error(err);
+        Swal.fire('خطأ في الاتصال', 'تعذر الحفظ في Supabase: ' + err.message, 'error');
       }
     }
 
+    // ==========================================
+    // 6. OWNER FINANCIAL / DEAL TRACKER
+    // ==========================================
+    function getStoredDeals() {
+      try {
+        return JSON.parse(localStorage.getItem('studify_cloud_deals') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveStoredDeals(deals) {
+      localStorage.setItem('studify_cloud_deals', JSON.stringify(deals));
+      // Sync to cloud config background
+      currentConfig.owner_deals = deals;
+      if (supabase) {
+        supabase.from('settings').update({ config: currentConfig }).eq('id', 1).then(() => {}).catch(() => {});
+      } else {
+        directUpdateSettings(currentConfig).catch(() => {});
+      }
+      renderDeals();
+    }
+
+    function renderDeals() {
+      const deals = getStoredDeals();
+      let totalGross = 0;
+      let totalMarketer = 0;
+      let totalOps = 0;
+      let totalNet = 0;
+
+      deals.forEach(d => {
+        totalGross += Number(d.gross) || 0;
+        totalMarketer += Number(d.marketer) || 0;
+        totalOps += Number(d.ops) || 0;
+        totalNet += Number(d.net) || 0;
+      });
+
+      document.getElementById('kpiGross').textContent = totalGross.toLocaleString('en-US') + ' ج';
+      document.getElementById('kpiMarketer').textContent = totalMarketer.toLocaleString('en-US') + ' ج';
+      document.getElementById('kpiOps').textContent = totalOps.toLocaleString('en-US') + ' ج';
+      document.getElementById('kpiNet').textContent = totalNet.toLocaleString('en-US') + ' ج';
+
+      const margin = totalGross > 0 ? Math.round((totalNet / totalGross) * 100) : 0;
+      document.getElementById('kpiMargin').textContent = margin + '% هامش';
+
+      const listEl = document.getElementById('dealsListEl');
+      if (!listEl) return;
+
+      if (deals.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-deals">
+            <i class="fa-regular fa-folder-open" style="font-size:1.8em;margin-bottom:6px;display:block;"></i>
+            لا توجد صفقات مسجلة بعد. اضغط "تسجيل صفقة / اشتراك" لإضافة أول اشتراك.
+          </div>`;
+        return;
+      }
+
+      listEl.innerHTML = deals.map((d, idx) => `
+        <div class="deal-item">
+          <div class="deal-main">
+            <div class="deal-center">
+              <span>${d.center || 'سنتر'}</span>
+              <span style="font-size:0.85em;padding:2px 6px;border-radius:4px;background:var(--border);color:var(--text-sec);">${d.plan || 'باقة'}</span>
+            </div>
+            <div class="deal-sub">
+              <span><i class="fa-regular fa-calendar"></i> ${d.date || 'اليوم'}</span>
+              ${d.marketerName ? `<span><i class="fa-solid fa-user-tag"></i> المسوق: ${d.marketerName}</span>` : ''}
+              ${d.notes ? `<span><i class="fa-regular fa-comment"></i> ${d.notes}</span>` : ''}
+            </div>
+          </div>
+          <div class="deal-fin-breakdown">
+            <div>
+              <div class="deal-net">+${Number(d.net || 0).toLocaleString('en-US')} ج</div>
+              <div style="font-size:0.75em;color:var(--text-muted)">
+                إجمالي ${d.gross} | خصم ${d.marketer} | سيرفر ${d.ops}
+              </div>
+            </div>
+            <button class="btn-del-deal" onclick="deleteDeal(${idx})" title="حذف الصفقة">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function openAddDealModal() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      const { value: dealData } = await Swal.fire({
+        title: 'تسجيل صفقة / اشتراك سنتر',
+        html: `
+          <div style="display:flex;flex-direction:column;gap:8px;text-align:right;font-size:0.86em;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-weight:700;">اسم السنتر:</label>
+                <input id="deal_center" class="swal2-input" style="width:100%;margin:4px 0;" value="سنتر أحمد قطب">
+              </div>
+              <div>
+                <label style="font-weight:700;">نوع الباقة:</label>
+                <select id="deal_plan" class="swal2-input" style="width:100%;margin:4px 0;">
+                  <option value="الخطة الذهبية (ترم)">الخطة الذهبية (ترم - 150 يوم)</option>
+                  <option value="الخطة المريحة (3 شهور)">الخطة المريحة (3 شهور)</option>
+                  <option value="الخطة المرنة (شهر)">الخطة المرنة (شهر)</option>
+                  <option value="باقة مخصصة">باقة مخصصة</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-weight:700;">السعر الإجمالي (ج):</label>
+                <input id="deal_gross" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="8000" oninput="calcModalPreview()">
+              </div>
+              <div>
+                <label style="font-weight:700;">عمولة/خصم المسوق:</label>
+                <input id="deal_marketer" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="2000" oninput="calcModalPreview()">
+              </div>
+              <div>
+                <label style="font-weight:700;">مصاريف السيرفر:</label>
+                <input id="deal_ops" type="number" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="1000" oninput="calcModalPreview()">
+              </div>
+            </div>
+
+            <div id="modalProfitPreview" style="background:var(--success-glow);border:1px solid rgba(16,185,129,0.3);padding:8px 12px;border-radius:8px;text-align:center;font-weight:800;color:var(--success);font-size:0.95em;">
+              صافي الربح لك: 0 ج (هامش 0%)
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-weight:700;">اسم المسوق / المندوب:</label>
+                <input id="deal_marketer_name" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="اختياري">
+              </div>
+              <div>
+                <label style="font-weight:700;">تاريخ التعاقد:</label>
+                <input id="deal_date" type="date" class="swal2-input" style="width:100%;margin:4px 0;" value="${todayStr}">
+              </div>
+            </div>
+
+            <div>
+              <label style="font-weight:700;">ملاحظات:</label>
+              <input id="deal_notes" class="swal2-input" style="width:100%;margin:4px 0;" placeholder="طريقة الدفع، تفاصيل أخرى...">
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'حفظ الصفقة',
+        confirmButtonColor: '#8B5CF6',
+        cancelButtonText: 'إلغاء',
+        didOpen: () => {
+          window.calcModalPreview = function() {
+            const gross = parseFloat(document.getElementById('deal_gross').value) || 0;
+            const mkt = parseFloat(document.getElementById('deal_marketer').value) || 0;
+            const ops = parseFloat(document.getElementById('deal_ops').value) || 0;
+            const net = gross - mkt - ops;
+            const pct = gross > 0 ? Math.round((net / gross) * 100) : 0;
+            const el = document.getElementById('modalProfitPreview');
+            if (el) {
+              el.textContent = `صافي الربح لك: ${net.toLocaleString('en-US')} ج (هامش ${pct}%)`;
+              el.style.color = net >= 0 ? 'var(--success)' : 'var(--danger)';
+            }
+          };
+          window.calcModalPreview();
+        },
+        preConfirm: () => {
+          const gross = parseFloat(document.getElementById('deal_gross').value) || 0;
+          const marketer = parseFloat(document.getElementById('deal_marketer').value) || 0;
+          const ops = parseFloat(document.getElementById('deal_ops').value) || 0;
+          const net = gross - marketer - ops;
+
+          if (gross <= 0) {
+            Swal.showValidationMessage('يرجى إدخال السعر الإجمالي');
+            return false;
+          }
+
+          return {
+            center: document.getElementById('deal_center').value.trim(),
+            plan: document.getElementById('deal_plan').value,
+            gross,
+            marketer,
+            ops,
+            net,
+            marketerName: document.getElementById('deal_marketer_name').value.trim(),
+            date: document.getElementById('deal_date').value,
+            notes: document.getElementById('deal_notes').value.trim(),
+            createdAt: new Date().toISOString()
+          };
+        }
+      });
+
+      if (!dealData) return;
+
+      const deals = getStoredDeals();
+      deals.unshift(dealData);
+      saveStoredDeals(deals);
+      showToast('تم حفظ الصفقة وتحديث مؤشرات الأرباح بنجاح', 'success');
+    }
+
+    async function deleteDeal(idx) {
+      const res = await Swal.fire({
+        title: 'حذف هذه الصفقة؟',
+        text: 'سيتم حذف هذا السجل وتحديث حسابات الأرباح.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        confirmButtonColor: '#EF4444',
+        cancelButtonText: 'إلغاء'
+      });
+      if (!res.isConfirmed) return;
+
+      const deals = getStoredDeals();
+      deals.splice(idx, 1);
+      saveStoredDeals(deals);
+      showToast('تم حذف الصفقة', 'info');
+    }
+
+    // ==========================================
+    // 7. REALTIME LIVE SYNC
+    // ==========================================
+    function setupRealtimeListener() {
+      if (!supabase) return;
+      try {
+        supabase
+          .channel('cloud-manager-sync')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'settings', filter: 'id=eq.1' }, (payload) => {
+            console.log('[Realtime Push from Cloud]', payload);
+            loadLiveStatus();
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('[Realtime error]', e);
+      }
+    }
+
+    // ==========================================
+    // 8. THEME TOGGLE (DARK / LIGHT)
+    // ==========================================
     function toggleTheme() {
       const cur = document.documentElement.getAttribute('data-theme') || 'dark';
       const next = cur === 'dark' ? 'light' : 'dark';
@@ -638,24 +1540,37 @@
     function updateThemeUI(theme) {
       const icon = document.getElementById('themeIcon');
       const label = document.getElementById('themeLabel');
+      const meta = document.getElementById('metaThemeColor');
       if (theme === 'light') {
         if (icon) icon.className = 'fa-solid fa-moon';
-        if (label) label.textContent = 'الوضع الليلي';
+        if (label) label.textContent = 'الليلي';
+        if (meta) meta.setAttribute('content', '#FFFFFF');
       } else {
         if (icon) icon.className = 'fa-solid fa-sun';
-        if (label) label.textContent = 'الوضع النهاري';
+        if (label) label.textContent = 'النهاري';
+        if (meta) meta.setAttribute('content', '#090E17');
       }
     }
 
     function showToast(msg, icon = 'success') {
-      Swal.fire({ toast: true, position: 'top-end', timer: 2500, showConfirmButton: false, icon, title: msg });
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        timer: 3000,
+        showConfirmButton: false,
+        icon,
+        title: msg
+      });
     }
 
-    // Initial load
+    // ==========================================
+    // 9. INIT ON LOAD
+    // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
       updateThemeUI(currentTheme);
       loadLiveStatus();
+      setupRealtimeListener();
     });
   </script>
 </body>
